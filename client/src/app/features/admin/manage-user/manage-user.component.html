@@ -1,0 +1,147 @@
+<div>
+  <div class="header">
+    <h1>Manage Users</h1>
+    <div class="search-bar">
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        placeholder="Search by email or userName"
+        class="search-input"
+      />
+      <button (click)="searchDataByKey()" class="search-btn">
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
+    <div style="width: 200px"></div>
+  </div>
+  <button mat-raised-button color="primary" (click)="openAddUserModal()">
+    Add New User
+  </button>
+
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="_id">
+      <th mat-header-cell *matHeaderCellDef>#Id</th>
+      <td mat-cell *matCellDef="let row">{{ row._id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="userName">
+      <th mat-header-cell *matHeaderCellDef>User Name</th>
+      <td mat-cell *matCellDef="let row">{{ row.userName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let row">{{ row.email }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="roles">
+      <th mat-header-cell *matHeaderCellDef>Roles</th>
+      <td mat-cell *matCellDef="let row">{{ row.roles.join(", ") }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.status === "active" ? "Hoạt động" : "Bị khóa" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef>Created At</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.createdAt | date : "short" }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-button (click)="editUser(row)">Chỉnh sửa</button>
+        <button mat-button (click)="lockUser(row)">
+          {{ row.status === "active" ? "Khóa" : "Gỡ khóa" }}
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <mat-paginator
+    [length]="totalRecords"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
+  <div id="addUserModal" class="modal" [class.show]="isModalOpen">
+    <div (click)="closeAddUserModal()" class="modal-ovverlay-click"></div>
+    <div class="modal-content">
+      <button mat-icon-button (click)="closeAddUserModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <h2>{{ isEditUser ? "Edit User" : "Add New User" }}</h2>
+      <form (ngSubmit)="!isEditUser ? addNewUser() : updateUser()">
+        <mat-form-field appearance="fill">
+          <mat-label>User Name</mat-label>
+          <input
+            matInput
+            name="userName"
+            [(ngModel)]="userForm.userName"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            name="email"
+            type="email"
+            [(ngModel)]="userForm.email"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="!isEditUser" appearance="fill">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            name="password"
+            type="password"
+            [(ngModel)]="passWordForm.password"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="!isEditUser" appearance="fill">
+          <mat-label>Confirm Password</mat-label>
+          <input
+            matInput
+            name="confirmPassword"
+            type="password"
+            [(ngModel)]="passWordForm.confirmPassword"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Role</mat-label>
+          <mat-select
+            id="roles"
+            [(ngModel)]="userForm.roles"
+            name="roles"
+            multiple
+            required
+          >
+            <mat-option value="USER">User</mat-option>
+            <mat-option value="ADMIN">Admin</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit">Lưu</button>
+      </form>
+    </div>
+  </div>
+</div>

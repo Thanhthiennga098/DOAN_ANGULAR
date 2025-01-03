@@ -1,0 +1,108 @@
+<div>
+  <div class="header">
+    <h1>Manage Posts</h1>
+    <div class="search-bar">
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        placeholder="Search by id or content or title"
+        class="search-input"
+      />
+      <button (click)="searchDataByKey()" class="search-btn">
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
+    <div style="width: 200px"></div>
+  </div>
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="_id">
+      <th mat-header-cell *matHeaderCellDef>#Mã bài</th>
+      <td mat-cell *matCellDef="let row" [ngStyle]="{ 'max-width': '150px' }">
+        {{ row._id }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="author">
+      <th mat-header-cell *matHeaderCellDef>Tác giả</th>
+      <td mat-cell *matCellDef="let row" [ngStyle]="{ 'max-width': '300px' }">
+        {{ row.author.email }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="content">
+      <th mat-header-cell *matHeaderCellDef>Nội dung</th>
+      <td mat-cell *matCellDef="let row" [ngStyle]="{ 'max-width': '200px' }">
+        {{ row.content }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>Tiêu đề</th>
+      <td mat-cell *matCellDef="let row" [ngStyle]="{ 'max-width': '200px' }">
+        {{ row.title }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="images">
+      <th mat-header-cell *matHeaderCellDef>Ảnh</th>
+      <td mat-cell *matCellDef="let row">
+        <div
+          *ngIf="row.images && row.images.length > 0; else noImages"
+          style="display: flex; flex-wrap: wrap; gap: 10px"
+        >
+          <img
+            *ngFor="let image of row.images"
+            [src]="URLIMAGE + '/' + image"
+            alt="User Image"
+            style="
+              width: 50px;
+              height: 50px;
+              object-fit: cover;
+              border-radius: 4px;
+            "
+          />
+        </div>
+        <ng-template #noImages>
+          <span>Không có ảnh</span>
+        </ng-template>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalComment">
+      <th mat-header-cell *matHeaderCellDef>Bình luận</th>
+      <td mat-cell *matCellDef="let row">{{ row.totalComment }}</td>
+    </ng-container>
+    <ng-container matColumnDef="likes">
+      <th mat-header-cell *matHeaderCellDef>Lượt thích</th>
+      <td mat-cell *matCellDef="let row">{{ row.likes.length }}</td>
+    </ng-container>
+    <ng-container matColumnDef="totalReport">
+      <th mat-header-cell *matHeaderCellDef>Bị báo cáo</th>
+      <td mat-cell *matCellDef="let row">{{ row.totalReport }}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Trạng thái</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.status === "active" ? "Hoạt động" : "Bị Ẩn" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-button (click)="deletePost(row)">Xóa</button>
+        <button mat-button (click)="lockPost(row)">
+          {{ row.status === "active" ? "Ẩn" : "Hiện" }}
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <mat-paginator
+    [length]="totalRecords"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
+</div>

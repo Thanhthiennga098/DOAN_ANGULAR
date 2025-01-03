@@ -1,0 +1,60 @@
+<div class="home_container">
+  <div class="create-post-container">
+    <div class="create-post-header">
+      <span class="user-avatar" *ngIf="!user.avatar">{{
+        getUserInitial()
+      }}</span>
+      <img
+        *ngIf="user.avatar"
+        [src]="urlAvatar + '/' + user.avatar"
+        alt="Avatar"
+        class="user-avatar"
+      />
+      <input
+        type="text"
+        placeholder="Tiêu đề"
+        class="post-input"
+        [(ngModel)]="post.title"
+      />
+    </div>
+    <div class="create-post-header">
+      <textarea
+        placeholder="Bạn đang nghĩ gì?"
+        class="post-input"
+        [(ngModel)]="post.content"
+      ></textarea>
+    </div>
+    <div class="create-post-actions">
+      <label class="custom-file-upload">
+        <input
+          type="file"
+          accept="image/*"
+          (change)="onFileChange($event)"
+          multiple
+        />
+        <span class="upload-icon">📷</span> Thêm Ảnh
+      </label>
+      <button class="action-btn post-btn" (click)="submitPost()">Đăng</button>
+    </div>
+    <div class="image-preview-container">
+      <div
+        class="image-preview"
+        *ngFor="let image of post.images; let i = index"
+      >
+        <img [src]="image.preview" alt="Image Preview" />
+        <button class="delete-btn" (click)="removeImage(i)">X</button>
+      </div>
+    </div>
+  </div>
+  <div class="posts-container" (scroll)="onScroll($event)">
+    <div *ngFor="let post of posts">
+      <app-post
+        [postData]="post"
+        [isAuthor]="post.author._id === getUserIdInitial()"
+      ></app-post>
+    </div>
+
+    <!-- Thêm một nút hoặc thông báo khi đang tải dữ liệu -->
+    <div *ngIf="loading">Loading more posts...</div>
+  </div>
+</div>

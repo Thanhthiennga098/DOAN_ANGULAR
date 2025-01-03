@@ -1,0 +1,260 @@
+<div class="post">
+  <div class="post-header">
+    <div class="user-info">
+      <div class="user-avatar" *ngIf="!postData.author.avatar">
+        {{ postData.author.userName.charAt(0).toUpperCase() }}
+      </div>
+      <img
+        *ngIf="postData.author.avatar"
+        [src]="URLAVATAR + '/' + postData.author.avatar"
+        alt="Avatar"
+        class="user-avatar"
+      />
+      <span class="user-name">{{ postData.author.userName }}</span>
+    </div>
+    <div class="action-wrapper">
+      <span class="post-time">{{ postData.createdAt | date : "short" }}</span>
+      <div>
+        <button
+          class="options-btn"
+          (click)="toggleOptionsPostMenu(postData._id)"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <!-- Menu Options -->
+        <div *ngIf="openPostMenuId === postData._id" class="options-menu">
+          <button (click)="openReportModal()">Báo cáo</button>
+          <button *ngIf="isAuthor" (click)="editPost(postData._id)">
+            Chỉnh sửa
+          </button>
+          <button *ngIf="isAuthor" (click)="deletePost(postData._id)">
+            Xóa
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p *ngIf="!postData.isEdit" class="post-title">{{ postData.title }}</p>
+    <p *ngIf="!postData.isEdit">
+      {{ postData.content }}
+    </p>
+    <input
+      *ngIf="postData.isEdit"
+      type="text"
+      placeholder="Tiêu đề"
+      class="post-input"
+      [(ngModel)]="postData.title"
+    />
+    <textarea
+      *ngIf="postData.isEdit"
+      class="comment-edit-input"
+      [(ngModel)]="postData.content"
+    ></textarea>
+  </div>
+  <div class="create-post-actions">
+    <label
+      class="custom-file-upload"
+      *ngIf="postData.isEdit && postData.images.length === 0"
+    >
+      <input
+        type="file"
+        accept="image/*"
+        (change)="onFileChange($event)"
+        multiple
+      />
+      <span class="upload-icon">📷</span> Thêm Ảnh
+    </label>
+    <div class="post-btn_wrapper">
+      <button
+        *ngIf="postData.isEdit"
+        class="action-btn post-btn"
+        (click)="saveEditPost()"
+      >
+        Lưu chỉnh sửa
+      </button>
+      <button
+        *ngIf="postData.isEdit"
+        class="action-btn cancel-btn"
+        (click)="cancelEditPost()"
+      >
+        Hủy
+      </button>
+    </div>
+  </div>
+  <div class="image-preview-container">
+    <div
+      class="image-preview"
+      *ngFor="let image of postData.updateImages; let i = index"
+    >
+      <img [src]="image.preview" alt="Image Preview" />
+      <button class="delete-btn" (click)="removeImage(i)">X</button>
+    </div>
+  </div>
+  <!-- Phần hiển thị hình ảnh -->
+  <div class="post-images">
+    <ng-container *ngFor="let image of postData.images; let i = index">
+      <img
+        crossorigin="anonymous"
+        *ngIf="i < 5"
+        [src]="URLIMAGE + '/' + image"
+        [alt]="'Image ' + (i + 1)"
+        class="post-image"
+        (click)="openImageModal(i)"
+      />
+      <div *ngIf="i === 5" class="more-images">
+        +{{ postData.images.length - 5 }}
+      </div>
+    </ng-container>
+    <button
+      *ngIf="postData.images.length > 0 && postData.isEdit"
+      (click)="clearImg()"
+      class="clearImg-btn"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="post-actions">
+    <button class="like-btn" (click)="likePost()">
+      <span class="icon">
+        <mat-icon>{{
+          postData.liked ? "thumb_up" : "thumb_up_off_alt"
+        }}</mat-icon>
+      </span>
+      Like
+    </button>
+    <button class="comment-btn" (click)="openCommentModal()">
+      <span class="icon">
+        <mat-icon>comment</mat-icon>
+      </span>
+      Comment
+    </button>
+  </div>
+
+  <div class="post-stats">
+    <span>{{ postData.likes.length }} Likes</span>
+    <span>{{ postData.totalComment }} Comments</span>
+  </div>
+</div>
+<div *ngIf="isModalOpen" class="image-modal" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <img [src]="currentImage" alt="Selected Image" class="modal-image" />
+    <div class="modal-nav">
+      <button (click)="prevImage()" class="modal-nav-btn">❮</button>
+      <button (click)="nextImage()" class="modal-nav-btn">❯</button>
+    </div>
+  </div>
+</div>
+<!-- Modal Comment -->
+<div
+  *ngIf="isCommentModalOpen"
+  class="comment-modal"
+  (click)="closeCommentModal()"
+>
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3 class="modal-title">Comments</h3>
+    <!-- Display comments -->
+    <div *ngFor="let comment of listComment" class="comment-item">
+      <div class="comment-wrapper">
+        <div class="comment-info">
+          <div class="comment-author">{{ comment.author.userName }}</div>
+          <div class="comment-footer">
+            <span class="comment-date">{{
+              comment.createdAt | date : "short"
+            }}</span>
+          </div>
+        </div>
+        <div>
+          <button class="options-btn" (click)="toggleOptionsMenu(comment._id)">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <!-- Menu Options -->
+          <div *ngIf="openedMenuId === comment._id" class="options-menu">
+            <button (click)="openReportModal(comment._id)">Báo cáo</button>
+            <button
+              *ngIf="getUserInitial() === comment.author._id"
+              (click)="editComment(comment)"
+            >
+              Chỉnh sữa
+            </button>
+            <button
+              *ngIf="getUserInitial() === comment.author._id"
+              (click)="deleteComment(comment._id)"
+            >
+              Xóa
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hiển thị nội dung bình luận -->
+      <div *ngIf="!comment.isEditing" class="comment-text">
+        {{ comment.content }}
+      </div>
+
+      <!-- Chỉnh sửa bình luận -->
+      <div *ngIf="comment.isEditing" class="comment-edit">
+        <textarea
+          [(ngModel)]="comment.content"
+          class="comment-edit-input"
+        ></textarea>
+        <div class="comment-edit-actions">
+          <button (click)="saveEditComment(comment)" class="save-btn">
+            Save
+          </button>
+          <button (click)="cancelEditComment(comment)" class="cancel-btn">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form to add a new comment -->
+    <div class="comment-form">
+      <textarea
+        [(ngModel)]="newCommentText"
+        placeholder="Write a comment..."
+        class="comment-input"
+      ></textarea>
+      <button (click)="addComment()" class="comment-submit">Post</button>
+    </div>
+
+    <button (click)="closeCommentModal()" class="close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+<!--Modal Report-->
+<!-- Modal Report -->
+<div
+  *ngIf="isReportModalOpen"
+  class="report-modal"
+  (click)="closeReportModal()"
+>
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3 class="modal-title">Báo cáo</h3>
+    <form class="report-form">
+      <label for="reportContent" class="report-label">Nội dung báo cáo</label>
+      <textarea
+        id="reportContent"
+        [(ngModel)]="reportContent"
+        placeholder="Nhập nội dung báo cáo..."
+        class="report-input"
+        name="reportContent"
+      ></textarea>
+      <div class="modal-actions">
+        <button type="button" class="cancel-btn" (click)="closeReportModal()">
+          Hủy
+        </button>
+        <button type="button" class="submit-btn" (click)="submitReport()">
+          Gửi
+        </button>
+      </div>
+    </form>
+    <button class="close-btn" (click)="closeReportModal()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>

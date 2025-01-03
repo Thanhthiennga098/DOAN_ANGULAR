@@ -1,0 +1,153 @@
+.home_container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f6f7;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 6px;
+}
+
+.create-post-container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.create-post-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-avatar {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  background-color: #999;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.post-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+  outline: none;
+}
+
+.post-input:focus {
+  border-color: #007bff;
+  background-color: #ffffff;
+}
+
+.create-post-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.custom-file-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background-color: #f3f4f6;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #333;
+  font-size: 14px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: #e5e7eb;
+  color: #111;
+}
+
+.custom-file-upload input[type="file"] {
+  display: none;
+}
+
+.upload-icon {
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn.post-btn {
+  padding: 8px 16px;
+  background-color: #007bff;
+
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.post-btn:hover {
+  background-color: #0056b3;
+}
+
+.app-post {
+  margin-top: 20px;
+}
+.image-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.image-preview {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(255, 0, 0, 0.8);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.delete-btn:hover {
+  background-color: rgba(255, 0, 0, 1);
+}
+.posts-container {
+  overflow-y: auto; /* Cho phép cuộn dọc */
+  padding-bottom: 20px; /* Để tránh content bị che ở dưới cùng */
+}

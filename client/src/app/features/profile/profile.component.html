@@ -1,0 +1,85 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <div class="profile-avatar">
+      <img
+        *ngIf="getUserAvatarInitial() !== ''"
+        [src]="urlAvatar + '/' + getUserAvatarInitial()"
+        alt="Avatar"
+        class="avatar-user"
+      />
+      <span class="avatar-user" *ngIf="getUserAvatarInitial() === ''">{{
+        user.userName.charAt(0).toUpperCase()
+      }}</span>
+    </div>
+    <div class="profile-info">
+      <h2>{{ user.userName }}</h2>
+      <p>{{ user.email }}</p>
+      <button mat-raised-button color="primary" (click)="openEditModal()">
+        Edit Profile
+      </button>
+    </div>
+  </div>
+
+  <div class="posts-container">
+    <div *ngFor="let post of posts">
+      <app-post
+        [postData]="post"
+        [isAuthor]="true"
+        (deletePostAgn)="deletePostAgn()"
+      ></app-post>
+    </div>
+    <div *ngIf="loading">Loading more posts...</div>
+  </div>
+  <!-- Modal -->
+  <div class="modal" [class.open]="isModalOpen">
+    <div class="modal-content">
+      <h2 style="text-align: center">Edit Profile</h2>
+      <div class="modal-body">
+        <div class="modal-field">
+          <label for="avatar-input" class="avatar-label">
+            <div
+              class="avatar-preview"
+              *ngIf="updatedUser.previewUrl; else defaultLabel"
+            >
+              <img [src]="updatedUser.previewUrl" alt="Avatar Preview" />
+            </div>
+            <ng-template #defaultLabel
+              ><span class="avatar-title">Chọn avatar</span></ng-template
+            >
+          </label>
+          <input
+            id="avatar-input"
+            type="file"
+            accept="image/*"
+            (change)="onFileChange($event)"
+            hidden
+          />
+        </div>
+        <div class="modal-field">
+          <label>Name:</label>
+          <input
+            type="text"
+            [(ngModel)]="updatedUser.userName"
+            placeholder="Enter your name"
+          />
+        </div>
+        <div class="modal-field">
+          <label>Email:</label>
+          <input
+            type="email"
+            [(ngModel)]="updatedUser.email"
+            placeholder="Enter your email"
+          />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" (click)="closeModal()">
+          Cancel
+        </button>
+        <button type="button" class="btn-primary" (click)="saveProfile()">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

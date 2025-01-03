@@ -1,0 +1,90 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #252728;
+  color: white;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.logo img {
+  height: 40px;
+}
+
+.search-bar {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.user {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo {
+  width: 70px;
+  object-fit: cover;
+}
+.menu-icon {
+  color: white;
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mat-menu-item {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.search-input {
+  width: 400px;
+  border-top-left-radius: 20px;
+  padding: 10px 12px;
+  outline: none;
+  border: none;
+  font-size: 16px;
+}
+
+.search-btn {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px 12px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-left: 1px solid #444;
+}
+
+.search-btn mat-icon {
+  font-size: 20px;
+  color: #252728;
+  transition: color 0.3s ease;
+  height: 16px;
+}
+
+.search-btn:hover mat-icon {
+  color: #1e88e5;
+}

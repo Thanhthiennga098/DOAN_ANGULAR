@@ -1,0 +1,30 @@
+<header class="header">
+  <div class="header-content">
+    <div class="logo">
+      <a href="/">
+        <img src="logo.png" alt="Facebook Logo" class="logo" />
+      </a>
+    </div>
+    <div class="search-bar">
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        placeholder="Search"
+        class="search-input"
+      />
+      <button (click)="updateSearchText()" class="search-btn">
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
+    <div class="user">
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn">
+        <mat-icon class="menu-icon">account_circle</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item disabled>{{ user.userName }}</button>
+        <button mat-menu-item (click)="goToProfile()">Go to Profile</button>
+        <button mat-menu-item (click)="logout()">Logout</button>
+      </mat-menu>
+    </div>
+  </div>
+</header>

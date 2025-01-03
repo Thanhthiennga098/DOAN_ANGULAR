@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="register-container">
+    <h2>Đăng Ký</h2>
+    <div>
+      <label for="userName">Tên Người Dùng</label>
+      <input
+        type="text"
+        id="userName"
+        [(ngModel)]="userName"
+        placeholder="Nhập tên người dùng"
+        maxlength="150"
+      />
+    </div>
+    <div>
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        [(ngModel)]="email"
+        placeholder="Nhập email"
+      />
+    </div>
+    <div>
+      <label for="password">Mật Khẩu</label>
+      <input
+        type="password"
+        id="password"
+        [(ngModel)]="password"
+        placeholder="Nhập mật khẩu"
+      />
+    </div>
+    <div>
+      <label for="confirmPassword">Xác Nhận Mật Khẩu</label>
+      <input
+        type="password"
+        id="confirmPassword"
+        [(ngModel)]="confirmPassword"
+        placeholder="Nhập lại mật khẩu"
+      />
+    </div>
+    <button (click)="register()">Đăng Ký</button>
+    <p class="login-link">
+      Đã có tài khoản? <a href="/login">Đăng Nhập ngay</a>.
+    </p>
+  </div>
+</div>

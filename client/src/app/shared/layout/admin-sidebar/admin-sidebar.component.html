@@ -1,0 +1,18 @@
+<div class="sidebar-container">
+  <div class="logo">
+    <img src="logoadmin.png" alt="Angular Logo" />
+    <h2>Admin Panel</h2>
+  </div>
+
+  <div *ngFor="let path of LinkManager" class="path-wrapper">
+    <a
+      [routerLink]="path.link"
+      routerLinkActive="active"
+      class="link"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <span class="icon">{{ path.icon }}</span>
+      <p>{{ path.title }}</p>
+    </a>
+  </div>
+</div>
